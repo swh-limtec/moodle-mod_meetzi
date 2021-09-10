@@ -1,13 +1,13 @@
-#meetzi_frame{
-	width: 100%;
+#meetzi_frame {
+    width: 100%;
     height: 95%;
     position: fixed;
     top: 50px;
     right: 0px;
 }
 
-.roomwarning{
-	margin: 5px;
-	font-size: large;
-	font-weight: bold;
+.roomwarning {
+    margin: 5px;
+    font-size: large;
+    font-weight: bold;
 }
