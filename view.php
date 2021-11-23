@@ -49,9 +49,6 @@ require_login($course, true, $cm);
 $courseid = $course->id;
 $context = context_course::instance($courseid);
 
-$moderation = true;
-
-
 $roles = get_user_roles($context, $USER->id);
 $config = get_config('meetzi');
 $institution = $meetzi->institution;
