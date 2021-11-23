@@ -69,3 +69,8 @@ $string['roomnotfound'] = 'room doesnt exist';
 $string['wrongconfig'] = 'meetzi-Instance configuration error';
 $string['roompin_01'] = 'your room-PIN is: ';
 $string['roompin_02'] = ' - please write down - required for joining room as moderator';
+
+$string['privacy:metadata:meetzi_extern'] = 'To log into a meetzi-room, user data is exchanged with the meetzi-service';
+$string['privacy:metadata:meetzi_extern:username'] = 'The moodle-username is used as the default username inside the meetzi-room and shown to other users of that room';
+
+

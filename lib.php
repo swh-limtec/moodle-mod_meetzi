@@ -57,9 +57,9 @@ function meetzi_add_instance($data, $mform = null) {
     $data->name = $mform->get_data()->{'roomname'};
     $data->roomname = $mform->get_data()->{'roomname'};
     $meetzidata = meetzi_create_room($mform);
-    $data->password = $meetzidata[0];
+    $data->institutionpassword = $meetzidata[0];
 
-    $data->loginhostname = $config->loginhostname;
+    $data->meetzihostname = $config->loginhostname;
     $data->institution = $config->institution;
     $data->instance = $config->instance;
 

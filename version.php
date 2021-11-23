@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_meetzi';
-$plugin->release = '1.0.0';
-$plugin->version = 2021102601;
+$plugin->release = '1.0.1';
+$plugin->version = 2021112301;
 $plugin->requires = 2020110900;
 $plugin->maturity = MATURITY_BETA;

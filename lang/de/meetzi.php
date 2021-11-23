@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['modulename'] = 'meetzi-Raum';
 $string['modulenameplural'] = 'meetzi-Räume';
-$string['modulename_help'] = 'neuen Raum anlegen';
+$string['modulename_help'] = 'neuen meetzi Raum anlegen';
 
 $string['meetzi:addinstance'] = 'Erstelle einen neuen Raum';
 
@@ -70,4 +70,7 @@ $string['roomnotfound'] = 'Raum existiert nicht mehr';
 $string['wrongconfig'] = 'Fehler in meetzi-Instanz Konfiguration';
 $string['roompin_01'] = 'Ihre Raum-PIN ist: ';
 $string['roompin_02'] = ' - bitte notieren - wird zum Beitreten als Moderator benötigt';
+
+$string['privacy:metadata:meetzi_extern'] = 'Um sich in den meetzi-Raum einzuloggen, werden Nutzerdaten von moodle mit meetzi geteilt';
+$string['privacy:metadata:meetzi_extern:username'] = 'Der moodle Nutzername wird standardmäßig auch als Nutzername im meetzi-Raum verwendet und anderen Nutzern angezeigt';
 

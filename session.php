@@ -36,15 +36,19 @@ $meetziroomname = required_param('meetzi_roomname', PARAM_TEXT);
 $meetzipassword = required_param('meetzi_password', PARAM_TEXT);
 $originlocation = required_param('originLocation', PARAM_TEXT);
 $username = $USER->username;
+$context = context_course::instance($courseid);
+$moderation = false;
+if (has_capability('mod/meetzi:moderate', $context)) {
+    $moderation = true;
+}
 
-$teacher = required_param('t', PARAM_BOOL);
 require_login($courseid);
 
 $PAGE->set_title($meetziroomname);
 $PAGE->set_heading($meetziroomname);
 echo $OUTPUT->header();
 
-if ($teacher) {
+if ($moderation) {
     echo "<iframe id='meetzi_frame' allow='camera; microphone; display-capture' allowfullscreen
     src='https://".$meetzihostname."?t,".$institution."_".$meetziroomname.",".$meetzipassword.",".$username.
     "&originLocation=".$originlocation."' title='meetzi'></iframe>";
@@ -55,4 +59,6 @@ if ($teacher) {
 }
 
 echo $OUTPUT->footer();
-
+?>
+<style>#page-footer{display:none;}</style>
+<?php

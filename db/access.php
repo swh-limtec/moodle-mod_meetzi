@@ -42,4 +42,13 @@ $capabilities = array(
             'user' => CAP_ALLOW,
         )
     ),
+
+    'mod/meetzi:moderate' => array(
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes' => array(
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW
+        )
+    ),
 );

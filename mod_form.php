@@ -69,9 +69,10 @@ class mod_meetzi_mod_form extends moodleform_mod {
      * Validates form and checks if chosen roomname already exists within meetzi instance
      *
      * @param mod_meetzi_mod_form $data
+     * @param mod_meetzi_mod_form $files
      * @return array $errors validation errors like room already exists within meetzi instance
      */
-    public function validation($data) {
+    public function validation($data, $files) {
         $errors = array();
         $config = get_config('meetzi');
         $hostname = $config->loginhostname;

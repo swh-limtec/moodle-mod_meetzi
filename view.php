@@ -70,13 +70,6 @@ if ($jsonresult['returnmsg']['status'] == "error") {
     .get_string('roomnotfound', 'meetzi').'</div>');
 }
 
-$roles = get_user_roles($context, $USER->id, true);
-
-foreach ($roles as $role) {
-    if ($role->shortname == 'student') {
-        $moderation = false;
-    }
-}
 
 $PAGE->set_url('/mod/meetzi/view.php', array('id' => $cm->id));
 $PAGE->set_title(format_string($meetzi->name));
@@ -84,8 +77,8 @@ $PAGE->set_heading(format_string($course->fullname));
 echo $OUTPUT->header();
 echo $OUTPUT->heading($meetzi->name);
 
-$urlparams = array('courseid' => $course->id, 'meetzi_hostname' => $meetzi->loginhostname, 'meetzi_roomname' => $meetzi->roomname,
-'meetzi_password' => $meetzi->password, 't' => $moderation,
+$urlparams = array('courseid' => $course->id, 'meetzi_hostname' => $meetzi->meetzihostname, 'meetzi_roomname' => $meetzi->roomname,
+'meetzi_password' => $meetzi->institutionpassword,
 'meetzi_institution' => $meetzi->institution, 'originLocation' => urlencode($PAGE->url));
 
 echo $OUTPUT->single_button(new moodle_url('/mod/meetzi/session.php', $urlparams), get_string('access', 'meetzi'), 'post');
