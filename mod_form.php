@@ -24,7 +24,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+global $CFG;
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
+
 
 /**
  * Meetzi settings form.
@@ -54,10 +56,12 @@ class mod_meetzi_mod_form extends moodleform_mod {
         $defaultname = trim($defaultname, "https://");
         $defaultname = trim($defaultname, "http://");
         $defaultname = str_replace('.', '-', $defaultname);
-        $defaultname = $defaultname."-".$COURSE->fullname;
+        $coursename = $COURSE->fullname;
+        $coursename = preg_replace('/[^A-Za-z0-9\-]/', '', $coursename);
+        $defaultname = $defaultname."-".$coursename;
         $mform->setDefault('roomname', $defaultname);
         $mform->addRule('roomname', null, 'required', null, 'client');
-        $mform->addRule('roomname', get_string('warningalphanumeric', 'meetzi'), 'regex', '/^[a-zA-Z0-9-_]+$/', 'client');
+        $mform->addRule('roomname', get_string('warningalphanumeric', 'meetzi'), 'regex', '/^[a-zA-Z0-9-]+$/', 'client');
         $mform->addRule('roomname', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
         $mform->addHelpButton('roomname', 'modulename', 'meetzi');
 
@@ -73,6 +77,10 @@ class mod_meetzi_mod_form extends moodleform_mod {
      * @return array $errors validation errors like room already exists within meetzi instance
      */
     public function validation($data, $files) {
+
+        global $CFG;
+        require_once($CFG->libdir.'/filelib.php');
+
         $errors = array();
         $config = get_config('meetzi');
         $hostname = $config->loginhostname;
@@ -80,13 +88,21 @@ class mod_meetzi_mod_form extends moodleform_mod {
         $institutionpw = $config->institutionpw;
         $instance = $config->instance;
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://".$hostname."/api/index.php?type=checkifroomexists&instance=".
-        $instance."&room=".$data['roomname']."&school=".$institution);
-        curl_setopt($ch, CURLOPT_POST, 0);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $result = curl_exec($ch);
+        $curlurl = "https://".$hostname."/api/index.php?type=checkifroomexists&instance=".
+        $instance."&room=".$data['roomname']."&school=".$institution;
+
+        $options = array(
+            'RETURNTRANSFER' => 1,
+            'HEADER' => 0,
+            'FAILONERROR' => 1,
+        );
+
+        $curl = new curl();
+        $result = $curl->get($curlurl, null, $options);
+
         $jsonresult = json_decode($result, true);
+
+        echo '<script> alert("'.$result.'")</script>';
 
         if (isset($jsonresult['returnmsg']['status'])) {
             if ($jsonresult['returnmsg']['status'] == "success") {
@@ -94,14 +110,11 @@ class mod_meetzi_mod_form extends moodleform_mod {
                 \core\notification::warning('<div class="roomwarning">'.get_string('roomexists', 'meetzi').'</div>');
             }
         }
-        curl_close($ch);
 
-        $ch2 = curl_init();
-        curl_setopt($ch2, CURLOPT_URL, "https://".$hostname."/api/index.php?type=checkteacherpassword&instance=".$instance.
-        "&teacherpassword=".$institutionpw."&school=".$institution);
-        curl_setopt($ch2, CURLOPT_POST, 0);
-        curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
-        $result2 = curl_exec($ch2);
+        $curlurl2 = "https://".$hostname."/api/index.php?type=checkteacherpassword&instance=".$instance.
+        "&teacherpassword=".$institutionpw."&school=".$institution;
+
+        $result2 = $curl->get($curlurl2, null, $options);
         $jsonresult2 = json_decode($result2, true);
 
         if (!isset($jsonresult2['roomauthenticated'])) {
@@ -115,7 +128,6 @@ class mod_meetzi_mod_form extends moodleform_mod {
                 \core\notification::warning('<div class="roomwarning">'.get_string('wrongconfig', 'meetzi').'</div>');
             }
         }
-        curl_close($ch2);
 
         return $errors;
     }

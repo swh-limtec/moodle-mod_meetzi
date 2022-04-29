@@ -48,6 +48,7 @@ $PAGE->set_title($meetziroomname);
 $PAGE->set_heading($meetziroomname);
 echo $OUTPUT->header();
 
+
 if ($moderation) {
     echo "<iframe id='meetzi_frame' allow='camera; microphone; display-capture' allowfullscreen
     src='https://".$meetzihostname."?t,".$institution."_".$meetziroomname.",".$meetzipassword.",".$username.

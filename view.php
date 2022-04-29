@@ -28,6 +28,8 @@ require_once(__DIR__.'/lib.php');
 global $USER;
 global $COURSE;
 global $DB;
+global $CFG;
+require_once($CFG->libdir.'/filelib.php');
 
 $id = optional_param('id', 0, PARAM_INT);
 $n = optional_param('l', 0, PARAM_INT);
@@ -53,20 +55,24 @@ $roles = get_user_roles($context, $USER->id);
 $config = get_config('meetzi');
 $institution = $meetzi->institution;
 $instance = $meetzi->instance;
+$hostname = $meetzi->meetzihostname;
 
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, "https://".$meetzi->loginhostname."/api/index.php?type=checkifroomexists&instance="
-.$instance."&room=".$meetzi->roomname."&school=".$institution);
-curl_setopt($ch, CURLOPT_POST, 0);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-$result = curl_exec($ch);
+
+$curl = new curl();
+$curlurl = "https://".$hostname."/api/index.php?type=checkifroomexists&instance="
+.$instance."&room=".$meetzi->roomname."&school=".$institution;
+$options = array(
+            'RETURNTRANSFER' => 1,
+            'HEADER' => 0,
+            'FAILONERROR' => 1,
+        );
+$result = $curl->get($curlurl, null, $options);
 $jsonresult = json_decode($result, true);
 
 if ($jsonresult['returnmsg']['status'] == "error") {
     \core\notification::warning('<div class="roomwarning" style="margin: 5px; font-size: large; font-weight: bold;">'
     .get_string('roomnotfound', 'meetzi').'</div>');
 }
-
 
 $PAGE->set_url('/mod/meetzi/view.php', array('id' => $cm->id));
 $PAGE->set_title(format_string($meetzi->name));

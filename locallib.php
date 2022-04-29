@@ -46,7 +46,7 @@ function meetzi_create_room($mform) {
     $roomname = $mform->get_data()->{'roomname'};
     $username = $USER->username;
 
-    $ch = curl_init();
+    $curl = new curl();
 
     $post = [
     'type' => 'createroom',
@@ -60,16 +60,21 @@ function meetzi_create_room($mform) {
     'instance' => $instance,
     ];
 
-    curl_setopt($ch, CURLOPT_URL, "https://".$inputurl."/api/index.php");
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    $result = curl_exec($ch);
+    $options = array(
+            'RETURNTRANSFER' => 1,
+            'HEADER' => 0,
+            'FAILONERROR' => 1,
+        );
+
+    $curlurl = "https://".$inputurl."/api/index.php";
+
+    $result = $curl->post($curlurl, $post, $options);
     $jsonresult = json_decode($result, true);
-    curl_close($ch);
 
     if (isset($jsonresult['config']['roomPin'])) {
         $pin = $jsonresult['config']['roomPin'];
+    } else {
+        $pin = '';
     }
 
     if (isset($jsonresult['config']['password'])) {
@@ -79,13 +84,10 @@ function meetzi_create_room($mform) {
         return 0;
     }
 
-    $ch2 = curl_init();
-    curl_setopt($ch2, CURLOPT_URL, "https://".$inputurl."/api/index.php?type=teacherjoinroom&room=".$roomname."&user
-    =".$username."&password=".$pw."&school=".$institution."&instance=".$instance."&teacherpassword=".$institutionpw);
-    curl_setopt($ch2, CURLOPT_POST, 0);
-    curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
-    $result2 = curl_exec($ch2);
-    curl_close($ch2);
+    $curlurl2 = "https://".$inputurl."/api/index.php?type=teacherjoinroom&room=".$roomname."&user
+    =".$username."&password=".$pw."&school=".$institution."&instance=".$instance."&teacherpassword=".$institutionpw;
+
+    $result2 = $curl->get($curlurl2, null, $options);
 
     return array($pw, $pin);
 }
