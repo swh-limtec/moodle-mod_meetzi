@@ -83,9 +83,7 @@ class restore_meetzi_activity_task extends restore_activity_task {
 
     /**
      * Define the restore log rules that will be applied
-     * by the {@link restore_logs_processor} when restoring
-     * meetzi logs. It must return one array
-     * of {@link restore_log_rule} objects
+     * when restoring meetzi logs. It must return one array
      */
     public static function define_restore_log_rules() {
         $rules = array();
@@ -102,9 +100,7 @@ class restore_meetzi_activity_task extends restore_activity_task {
 
     /**
      * Define the restore log rules that will be applied
-     * by the {@link restore_logs_processor} when restoring
-     * course logs. It must return one array
-     * of {@link restore_log_rule} objects
+     * when restoring course logs. It must return one array
      *
      * Note this rules are applied when restoring course logs
      * by the restore final task, but are defined here at

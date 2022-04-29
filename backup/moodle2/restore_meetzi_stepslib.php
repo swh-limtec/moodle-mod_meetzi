@@ -27,7 +27,7 @@ class restore_meetzi_activity_structure_step extends restore_activity_structure_
     /**
      * Defines structure of path elements to be processed during the restore
      *
-     * @return array of {@link restore_path_element}
+     * @return array
      */
     protected function define_structure() {
 
